@@ -1,2 +1,3 @@
 - 01-assign: *Using the Facade Pattern*
 - 02-assign: *Using Date.prototypes & Creating HTML template*
+- 03-assign: *Creating API-Docs using swagger*
