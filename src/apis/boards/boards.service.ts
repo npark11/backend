@@ -1,5 +1,6 @@
 import { Injectable, Scope } from '@nestjs/common';
 import { Board } from './entities/board.entity';
+import { IBoardsServiceCreate } from './interfaces/boards-service.interface';
 
 @Injectable({ scope: Scope.DEFAULT })
 export class BoardsService {
@@ -28,10 +29,11 @@ export class BoardsService {
     return result;
   }
 
-  create(writer: string, title: string, contents: string): string {
-    console.log(writer);
-    console.log(title);
-    console.log(contents);
+  // create(writer: string, title: string, contents: string): string {
+  create({ createBoardInput }: IBoardsServiceCreate): string {
+    console.log(createBoardInput.writer);
+    console.log(createBoardInput.title);
+    console.log(createBoardInput.contents);
 
     return 'Created your post Successfully!';
   }
