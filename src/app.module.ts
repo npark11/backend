@@ -3,7 +3,7 @@ import { BoardsModule } from './apis/boards/boards.module';
 import { GraphQLModule } from '@nestjs/graphql';
 import { ApolloDriver, ApolloDriverConfig } from '@nestjs/apollo';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { Board } from './apis/boards/entities/board.entity';
+// import { Board } from './apis/boards/entities/board.entity';
 import { ConfigModule } from '@nestjs/config';
 
 @Module({
@@ -23,7 +23,7 @@ import { ConfigModule } from '@nestjs/config';
       username: process.env.DATABASE_USERNAME,
       password: process.env.DATABASE_PASSWORD,
       database: process.env.DATABASE_DATABASE,
-      entities: [Board],
+      entities: [__dirname + '/apis/**/*.entity.*'],
       synchronize: true,
       logging: true,
     }),
