@@ -5,6 +5,7 @@ import { Product } from './entities/product.entity';
 import {
   IProductsServiceCreate,
   IProductsServiceFindOne,
+  IProductsServiceUpdate,
 } from './interfaces/products-service.interface';
 
 @Injectable()
@@ -25,6 +26,21 @@ export class ProductsService {
   create({ createProductInput }: IProductsServiceCreate): Promise<Product> {
     const result = this.productsRepository.save({
       ...createProductInput,
+    });
+    return result;
+  }
+
+  async update({
+    productId,
+    updateProductInput,
+  }: IProductsServiceUpdate): Promise<Product> {
+    const product = await this.productsRepository.findOne({
+      where: { id: productId },
+    });
+
+    const result = this.productsRepository.save({
+      ...product,
+      ...updateProductInput,
     });
     return result;
   }
