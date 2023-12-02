@@ -8,7 +8,7 @@ import { IProductsServiceCreate } from './interfaces/products-service.interface'
 export class ProductsService {
   constructor(
     @InjectRepository(Product)
-    private readonly productsRepository: Repository<Product>,
+    private readonly productsRepository: Repository<Product>, //
   ) {}
 
   create({ createProductInput }: IProductsServiceCreate): Promise<Product> {
