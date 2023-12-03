@@ -10,6 +10,7 @@ import { Product } from './entities/product.entity';
 import {
   IProductsServiceCheckSoldout,
   IProductsServiceCreate,
+  IProductsServiceDelete,
   IProductsServiceFindOne,
   IProductsServiceUpdate,
 } from './interfaces/products-service.interface';
@@ -68,5 +69,10 @@ export class ProductsService {
     //     HttpStatus.UNPROCESSABLE_ENTITY,
     //   );
     // }
+  }
+
+  async delete({ productId }: IProductsServiceDelete): Promise<boolean> {
+    const result = await this.productsRepository.softDelete({ id: productId });
+    return result.affected ? true : false;
   }
 }

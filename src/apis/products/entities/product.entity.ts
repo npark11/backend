@@ -5,6 +5,8 @@ import { ProductTag } from 'src/apis/productsTags/entities/productTag.entity';
 import { User } from 'src/apis/users/entities/user.entity';
 import {
   Column,
+  // CreateDateColumn,
+  DeleteDateColumn,
   Entity,
   JoinColumn,
   JoinTable,
@@ -12,6 +14,7 @@ import {
   ManyToOne,
   OneToOne,
   PrimaryGeneratedColumn,
+  // UpdateDateColumn,
 } from 'typeorm';
 
 @Entity()
@@ -54,4 +57,13 @@ export class Product {
   @ManyToMany(() => ProductTag, (productTags) => productTags.products)
   @Field(() => [ProductTag])
   productTags: ProductTag[];
+
+  // @CreateDateColumn()
+  // createdAt: Date;
+
+  // @UpdateDateColumn()
+  // updateAt: Date;
+
+  @DeleteDateColumn() // Soft Delete
+  deletedAt: Date;
 }
