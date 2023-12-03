@@ -15,6 +15,7 @@ import {
   IProductsServiceUpdate,
 } from './interfaces/products-service.interface';
 import { ProductsSaleslocationsService } from '../productsSaleslocations/productsSaleslocations.service';
+import { ProductsTagsService } from '../productsTags/productsTags.service';
 
 @Injectable()
 export class ProductsService {
@@ -23,18 +24,20 @@ export class ProductsService {
     private readonly productsRepository: Repository<Product>, //
 
     private readonly productsSaleslocationsService: ProductsSaleslocationsService,
+
+    private readonly productsTagsService: ProductsTagsService,
   ) {}
 
   findAll(): Promise<Product[]> {
     return this.productsRepository.find({
-      relations: ['productSaleslocation', 'productCategory'],
+      relations: ['productSaleslocation', 'productCategory', 'productTags'],
     });
   }
 
   findOne({ productId }: IProductsServiceFindOne): Promise<Product> {
     return this.productsRepository.findOne({
       where: { id: productId },
-      relations: ['productSaleslocation', 'productCategory'],
+      relations: ['productSaleslocation', 'productCategory', 'productTags'],
     });
   }
 
@@ -47,12 +50,25 @@ export class ProductsService {
     // });
 
     // Save product & product-saleslocation
-    const { productSaleslocation, productCategoryId, ...product } =
+    const { productSaleslocation, productCategoryId, productTags, ...product } =
       createProductInput;
 
     const result = await this.productsSaleslocationsService.create({
       productSaleslocation,
     });
+
+    const tagNames = (productTags as string[]).map((el) => el.replace('#', ''));
+
+    const prevTags = await this.productsTagsService.findByNames({ tagNames });
+
+    const temp = [];
+    tagNames.forEach((el) => {
+      const isExists = prevTags.find((prevEl) => el === prevEl.name);
+      if (!isExists) temp.push({ name: el });
+    });
+
+    const newTags = await this.productsTagsService.bulkInsert({ names: temp });
+    const tags = [...prevTags, ...newTags.identifiers];
 
     const result2 = this.productsRepository.save({
       ...product,
@@ -62,6 +78,7 @@ export class ProductsService {
         // when you want to get name
         // => createProductInput including name
       },
+      productTags: tags,
       // name: product.name,
       // description: product.description,
       // price: product.price,

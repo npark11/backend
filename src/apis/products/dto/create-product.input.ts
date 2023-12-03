@@ -1,6 +1,8 @@
 import { Field, InputType, Int } from '@nestjs/graphql';
 import { Min } from 'class-validator';
 import { ProductSaleslocationInput } from 'src/apis/productsSaleslocations/dto/product-saleslocation.input';
+import { ProductTag } from 'src/apis/productsTags/entities/productTag.entity';
+import { DeepPartial } from 'typeorm';
 
 @InputType()
 export class CreateProductInput {
@@ -19,4 +21,7 @@ export class CreateProductInput {
 
   @Field(() => String)
   productCategoryId: string;
+
+  @Field(() => [String], { nullable: true })
+  productTags: DeepPartial<ProductTag>[];
 }
