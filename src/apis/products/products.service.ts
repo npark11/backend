@@ -27,14 +27,14 @@ export class ProductsService {
 
   findAll(): Promise<Product[]> {
     return this.productsRepository.find({
-      relations: ['productSaleslocation'],
+      relations: ['productSaleslocation', 'productCategory'],
     });
   }
 
   findOne({ productId }: IProductsServiceFindOne): Promise<Product> {
     return this.productsRepository.findOne({
       where: { id: productId },
-      relations: ['productSaleslocation'],
+      relations: ['productSaleslocation', 'productCategory'],
     });
   }
 
@@ -47,7 +47,8 @@ export class ProductsService {
     // });
 
     // Save product & product-saleslocation
-    const { productSaleslocation, ...product } = createProductInput;
+    const { productSaleslocation, productCategoryId, ...product } =
+      createProductInput;
 
     const result = await this.productsSaleslocationsService.create({
       productSaleslocation,
@@ -56,6 +57,11 @@ export class ProductsService {
     const result2 = this.productsRepository.save({
       ...product,
       productSaleslocation: result,
+      productCategory: {
+        id: productCategoryId,
+        // when you want to get name
+        // => createProductInput including name
+      },
       // name: product.name,
       // description: product.description,
       // price: product.price,
