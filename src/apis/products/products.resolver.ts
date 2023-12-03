@@ -29,6 +29,7 @@ export class ProductsResolver {
     return this.productsService.create({ createProductInput });
   }
 
+  @Mutation(() => Product)
   updateProduct(
     @Args('productId') productId: string,
     @Args('updateProductInput') updateProductInput: UpdateProductInput,

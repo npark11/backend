@@ -1,8 +1,14 @@
-import { Injectable } from '@nestjs/common';
+import {
+  // HttpException,
+  // HttpStatus,
+  Injectable,
+  UnprocessableEntityException,
+} from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { Product } from './entities/product.entity';
 import {
+  IProductsServiceCheckSoldout,
   IProductsServiceCreate,
   IProductsServiceFindOne,
   IProductsServiceUpdate,
@@ -34,14 +40,33 @@ export class ProductsService {
     productId,
     updateProductInput,
   }: IProductsServiceUpdate): Promise<Product> {
-    const product = await this.productsRepository.findOne({
-      where: { id: productId },
-    });
+    const product = await this.findOne({ productId });
+    // const product = await this.productsRepository.findOne({
+    //   where: { id: productId },
+    // });
+
+    this.checkSoldout({ product });
 
     const result = this.productsRepository.save({
       ...product,
       ...updateProductInput,
     });
+
     return result;
+  }
+
+  checkSoldout({ product }: IProductsServiceCheckSoldout): void {
+    if (product.isSoldout) {
+      throw new UnprocessableEntityException(
+        'This product has been out of stock',
+      );
+    }
+
+    // if (product.isSoldout) {
+    //   throw new HttpException(
+    //     'This product has been out of stock',
+    //     HttpStatus.UNPROCESSABLE_ENTITY,
+    //   );
+    // }
   }
 }
