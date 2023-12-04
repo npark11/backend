@@ -13,7 +13,7 @@ export class JwtAccessStrategy extends PassportStrategy(Strategy, 'access') {
       //   return accessToken;
       // },
       jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
-      secretOrKey: 'mypassword',
+      secretOrKey: process.env.JWT_SECRET_ACCESSTOKEN,
     });
   }
 
