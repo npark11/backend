@@ -6,6 +6,7 @@ import { AuthService } from './auth.service';
 // import { TypeOrmModule } from '@nestjs/typeorm';
 // import { User } from '../users/entities/user.entity';
 import { UsersModule } from '../users/users.module';
+import { JwtAccessStrategy } from './strategies/jwt-access.strategy';
 
 @Module({
   imports: [
@@ -13,6 +14,7 @@ import { UsersModule } from '../users/users.module';
     UsersModule, //
   ],
   providers: [
+    JwtAccessStrategy,
     AuthResolver, //
     AuthService,
   ],
