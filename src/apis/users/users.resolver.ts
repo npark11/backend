@@ -4,7 +4,7 @@ import { User } from './entities/user.entity';
 import { UseGuards } from '@nestjs/common';
 // import { AuthGuard } from '@nestjs/passport';
 // import { Request, Response } from 'express';
-import { GqlAuthAccessGuard } from '../auth/guards/gql-auth.guard';
+import { GqlAuthGuard } from '../auth/guards/gql-auth.guard';
 import { IContext } from 'src/commons/interfaces/context';
 
 @Resolver()
@@ -13,7 +13,7 @@ export class UsersResolver {
     private readonly usersService: UsersService, //
   ) {}
 
-  @UseGuards(GqlAuthAccessGuard)
+  @UseGuards(GqlAuthGuard('access'))
   @Query(() => String)
   fetchUser(
     @Context() context: IContext, //

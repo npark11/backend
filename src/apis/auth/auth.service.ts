@@ -4,6 +4,7 @@ import * as bcrypt from 'bcrypt';
 import {
   IAuthServiceGetAccessToken,
   IAuthServiceLogin,
+  IAuthServiceRestoreAccessToken,
   IAuthServiceSetRefreshToken,
 } from './interfaces/auth-service.interface';
 import { JwtService } from '@nestjs/jwt';
@@ -32,6 +33,10 @@ export class AuthService {
     return this.getAccessToken({ user });
   }
 
+  restoreAccessToken({ user }: IAuthServiceRestoreAccessToken): string {
+    return this.getAccessToken({ user });
+  }
+
   setRefreshToken({ user, context }: IAuthServiceSetRefreshToken): void {
     const refreshToken = this.jwtService.sign(
       { sub: user.id },
@@ -41,10 +46,10 @@ export class AuthService {
     // For Developing
     context.res.setHeader(
       'set-Cookie',
-      `refreshToken=${refreshToken}: path=/;`,
+      `refreshToken=${refreshToken}; path=/;`,
     );
 
-    console.log(refreshToken);
+    // console.log(refreshToken);
 
     // For Release
     // context.res.setHeader('set-Cookie', `refreshToken=${refreshToken}: path=/; domain=.mybacksite.com; SameSite=None; Secure; httpOnly`);
@@ -54,7 +59,7 @@ export class AuthService {
   getAccessToken({ user }: IAuthServiceGetAccessToken): string {
     return this.jwtService.sign(
       { sub: user.id },
-      { secret: process.env.JWT_SECRET_ACCESSTOKEN, expiresIn: '1h' },
+      { secret: process.env.JWT_SECRET_ACCESSTOKEN, expiresIn: '10s' },
     );
   }
 }

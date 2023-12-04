@@ -7,6 +7,7 @@ import { AuthService } from './auth.service';
 // import { User } from '../users/entities/user.entity';
 import { UsersModule } from '../users/users.module';
 import { JwtAccessStrategy } from './strategies/jwt-access.strategy';
+import { JwtRefreshStrategy } from './strategies/jwt-refresh.strategy';
 
 @Module({
   imports: [
@@ -15,6 +16,7 @@ import { JwtAccessStrategy } from './strategies/jwt-access.strategy';
   ],
   providers: [
     JwtAccessStrategy,
+    JwtRefreshStrategy,
     AuthResolver, //
     AuthService,
   ],
